@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="row">
+
+    <% if @post.errors.any? %>
+      <h4>We have some errors here !</h4>
+      <ul>
+        <% @post.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <%= form_for @post do |f| %>
+
+      <div class="form-group">
+        <%= f.label :title, "Title" %>
+        <%= f.text_field :title, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :content, "Content" %>
+        <%= f.text_area :content, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.submit class: "btn btn-primary"%>
+      </div>
+    
+    <% end %>
+
+  </div>
+</div>
