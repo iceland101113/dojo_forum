@@ -9,6 +9,13 @@ class PostsController < ApplicationController
     @post = Post.new(post_params)
     if @post.save
       flash[:notice] = "post was successfully created"
+      if published?
+        @post.situation = "Publish"
+        @post.save
+      else
+        @post.situation = "Draft"
+        @post.save
+      end
       redirect_to root_path
     else
       flash.now[:alert] = "post was failed to create"
@@ -21,6 +28,10 @@ class PostsController < ApplicationController
 
   def post_params
     params.require(:post).permit(:title, :content, :authority)
+  end
+
+  def published?
+    params[:commit] == "Publish"
   end
 
 

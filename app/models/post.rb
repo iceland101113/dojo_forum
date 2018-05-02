@@ -1,6 +1,10 @@
 class Post < ApplicationRecord
+  mount_uploader :image, ImageUploader
   has_many :categorizations
   has_many :catgories, through: :categorizations
 
-  mount_uploader :image, ImageUploader
+  def is_published?
+    self.situation == "Publish"
+  end
+
 end

@@ -1,5 +1,25 @@
 <div class="container">
   <div class="row">
-    <%= @user.email %>
- </div>
+      <div class="col-md-4">
+        <% if @user.avatar == nil %>
+          <h1>尚無照片</h1>
+        <% else %>
+          <%= image_tag @user.avatar, class: "img-responsive center-block" %>
+        <% end %>
+      </div>
+      <div class="col-md-8">
+        <% if @user.name == nil %>
+          <h1>未命名</h1>
+        <% else %>
+          <h1><%= @user.name %></h1>
+        <% end %>
+        <h3><%= @user.email %></h3>
+        <hr>
+
+        <%= link_to 'Edit Profile', edit_user_path(@user), class: "btn btn-primary" %>
+
+      </div>
+  </div>
+
+  
 </div>
