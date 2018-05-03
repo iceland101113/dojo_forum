@@ -18,6 +18,11 @@
       </div>
 
       <div class="form-group">
+        <%= f.label :description, "Introduction" %>
+        <%= f.text_area :description, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
         <%= f.label :avatar, "Photo" %>
         <%= image_tag @user.avatar, width: '300px' if @user.avatar? %>
         <%= f.file_field :avatar %>
