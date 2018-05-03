@@ -12,11 +12,12 @@ class PostsController < ApplicationController
       if published?
         @post.situation = "Publish"
         @post.save
+        redirect_to user_path(current_user)
       else
         @post.situation = "Draft"
         @post.save
+        redirect_to user_path(current_user)
       end
-      redirect_to root_path
     else
       flash.now[:alert] = "post was failed to create"
       render :new
