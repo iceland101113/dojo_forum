@@ -1,0 +1,70 @@
+<div class="container">
+  <div class="row">
+      <div class="col-md-4">
+        <% if @user.avatar == nil %>
+          <h1>尚無照片</h1>
+        <% else %>
+          <%= image_tag @user.avatar, class: "img-responsive center-block" %>
+        <% end %>
+      </div>
+      <div class="col-md-8">
+        <% if @user.name == nil %>
+          <h1>未命名</h1>
+        <% else %>
+          <h1><%= @user.name %></h1>
+        <% end %>
+
+       <% if @user.description == nil %>
+          <h3>未新增自我介紹</h3>
+        <% else %>
+          <h3><%= @user.description %></h3>   
+        <% end %>
+        <hr>
+
+        <%= link_to 'Edit Profile', edit_user_path(@user), class: "btn btn-primary" %>
+
+      </div>
+  </div>
+  <br>
+  <div class="row">
+
+    <ul class="nav nav-tabs">
+      
+      <li><a href="#">My Post</a></li>
+      <li><a href="#">My Comment</a></li>
+      <li><a href="#">My Collect</a></li>
+      <li class="active"><a href="#">My Draft</a></li>
+      <li><a href="#">My Frined</a></li>
+    </ul>
+
+
+    
+    <div class="tab-content">
+      <div id="My Draft" class="tab-pane fade in active">
+      <table class="table table-striped ">
+        <thead>
+
+        </thead>
+        <tbody>
+          <% @posts.each do |post| %>
+          <tr>
+            <th scope="row"><%= post.title %></th>
+            <td><%= post.situation %></td>
+            <td><%= post.created_at %></td>
+            <td>
+              <%= link_to 'Show', post_path(post) %>
+              <%= link_to 'Edit', edit_post_path(post) %>
+              <%= link_to 'Delete', post_path(post), method: :delete, data: {confirm:"Are you sure?"} %>
+            </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      </div>
+    </div>
+
+  </div>
+
+  
+</div>

@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   resources :posts
   
   root "posts#index"
+
+  get "draft", to: "users#draft"
   
   resources :users, only: [:show, :edit, :update] 
 

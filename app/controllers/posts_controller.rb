@@ -6,17 +6,19 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = Post.new(post_params)
+    @user = current_user
+    @post = @user.posts.build(post_params)
+
     if @post.save
       flash[:notice] = "post was successfully created"
       if published?
         @post.situation = "Publish"
         @post.save
-        redirect_to user_path(current_user)
+        redirect_to user_path(@user)
       else
         @post.situation = "Draft"
         @post.save
-        redirect_to user_path(current_user)
+        redirect_to draft_path
       end
     else
       flash.now[:alert] = "post was failed to create"
