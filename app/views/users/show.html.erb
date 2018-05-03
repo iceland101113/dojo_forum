@@ -20,6 +20,43 @@
 
       </div>
   </div>
+  <br>
+  <div class="row">
+
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#">My Post</a></li>
+      <li><a href="#">My Comment</a></li>
+      <li><a href="#">My Collect</a></li>
+      <li><a href="#">My Draft</a></li>
+      <li><a href="#">My Frined</a></li>
+    </ul>
+
+    <div class="tab-content">
+      <div id="home" class="tab-pane fade in active">
+      <table class="table table-striped ">
+        <thead>
+
+        </thead>
+        <tbody>
+          <% @posts.each do |post| %>
+          <tr>
+            <th scope="row"><%= post.title %></th>
+            <td><%= post.situation %></td>
+            <td><%= post.created_at %></td>
+            <td>
+              <%= link_to 'Show', post_path(post) %>
+              <%= link_to 'Edit', edit_post_path(post) %>
+              <%= link_to 'Delete', post_path(post), method: :delete, data: {confirm:"Are you sure?"} %>
+            </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      </div>
+    </div>
+
+  </div>
 
   
 </div>

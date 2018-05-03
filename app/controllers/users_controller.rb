@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_action :set_user
 
   def show
-
+    @posts = Post.where("situation = 'Publish'")
   end
 
   def edit
