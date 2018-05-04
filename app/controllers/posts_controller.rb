@@ -32,6 +32,36 @@ class PostsController < ApplicationController
     @user = User.find(@post.user_id)
   end
 
+  def edit
+    @post = Post.find(params[:id])
+  end
+
+  def update
+    @post = Post.find(params[:id])
+    if @post.update(post_params)
+      if published?
+        @post.situation = "Publish"
+        @post.save
+      else
+        @post.situation = "Draft"
+        @post.save
+      end
+      redirect_to post_path(@post)
+      flash[:notice] = "post was successfully updated"
+    else
+      render :edit
+      flash[:alert] = "post was failed to update"
+    end
+  end
+
+  def destroy
+    @user = current_user
+    @post = Post.find(params[:id])
+    @post.destroy
+    redirect_to user_path(@user)
+    flash[:alert] = "post was deleted"
+  end
+
   private
 
   def post_params
