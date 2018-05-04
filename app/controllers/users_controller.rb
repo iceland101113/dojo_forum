@@ -4,11 +4,13 @@ class UsersController < ApplicationController
   def show
     @user = current_user
     @posts = Post.where("situation = ? and user_id = ?", "Publish", @user.id)
+    @drafts = Post.where("situation = ? and user_id = ?", "Draft", @user.id)
   end
 
   def draft
-    @user = User.find(params[:user])
-    @posts = Post.where("situation = ? and user_id = ?", "Draft", @user.id)
+    @user = current_user
+    @posts = Post.where("situation = ? and user_id = ?", "Publish", @user.id)
+    @drafts = Post.where("situation = ? and user_id = ?", "Draft", @user.id)
   end
 
   def edit

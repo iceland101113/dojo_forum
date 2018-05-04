@@ -29,39 +29,69 @@
   <div class="row">
 
     <ul class="nav nav-tabs">
-      
-      <li><a href="#">My Post</a></li>
-      <li><a href="#">My Comment</a></li>
-      <li><a href="#">My Collect</a></li>
-      <li class="active"><a href="#">My Draft</a></li>
-      <li><a href="#">My Frined</a></li>
+      <li id="post"><a data-toggle="tab" href="#MyPost">My Post</a></li>
+      <li id="comment"><a data-toggle="tab" href="#MyComment">My Comment</a></li>
+      <li id="collect"><a data-toggle="tab" href="#MyCollect">My Collect</a></li>
+      <li id="draft" class="active"><a data-toggle="tab" href="#MyDraft">My Draft</a></li>
+      <li id="friend"><a data-toggle="tab" href="#MyFriend">My Frined</a></li>
     </ul>
 
 
     
     <div class="tab-content">
-      <div id="My Draft" class="tab-pane fade in active">
-      <table class="table table-striped ">
-        <thead>
+      <div id="MyPost" class="tab-pane fade">
+        <table class="table table-striped ">
+          <thead>
 
-        </thead>
-        <tbody>
-          <% @posts.each do |post| %>
-          <tr>
-            <th scope="row"><%= post.title %></th>
-            <td><%= post.situation %></td>
-            <td><%= post.created_at %></td>
-            <td>
-              <%= link_to 'Show', post_path(post) %>
-              <%= link_to 'Edit', edit_post_path(post) %>
-              <%= link_to 'Delete', post_path(post), method: :delete, data: {confirm:"Are you sure?"} %>
-            </td>
-          </tr>
-          <% end %>
-        </tbody>
-      </table>
-
+          </thead>
+          <tbody>
+            <% @posts.each do |post| %>
+            <tr>
+              <th scope="row"><%= post.title %></th>
+              <td><%= post.situation %></td>
+              <td><%= post.created_at %></td>
+              <td>
+                <%= link_to 'Show', post_path(post) %>
+                <%= link_to 'Edit', edit_post_path(post) %>
+                <%= link_to 'Delete', post_path(post), method: :delete, data: {confirm:"Are you sure?"} %>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
       </div>
+
+      <div id="MyComment" class="tab-pane fade">
+      </div>
+
+      <div id="MyCollect" class="tab-pane fade">
+      </div>
+
+      <div id="MyDraft" class="tab-pane fade in active">
+        <table class="table table-striped ">
+          <thead>
+
+          </thead>
+          <tbody>
+            <% @drafts.each do |draft| %>
+            <tr>
+              <th scope="row"><%= draft.title %></th>
+              <td><%= draft.situation %></td>
+              <td><%= draft.created_at %></td>
+              <td>
+                <%= link_to 'Show', post_path(draft) %>
+                <%= link_to 'Edit', edit_post_path(draft) %>
+                <%= link_to 'Delete', post_path(draft), method: :delete, data: {confirm:"Are you sure?"} %>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="MyFriend" class="tab-pane fade">
+      </div>
+
     </div>
 
   </div>

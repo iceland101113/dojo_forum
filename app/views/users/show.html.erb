@@ -29,11 +29,11 @@
   <div class="row">
 
     <ul class="nav nav-tabs">
-      <li id="post" class="active"><a onclick="see_post()" data-toggle="tab" href="#MyPost">My Post</a></li>
-      <li id="comment"><a onclick="see_comment()" data-toggle="tab" href="#MyComment">My Comment</a></li>
-      <li id="collect"><a onclick="see_collect()" data-toggle="tab" href="#MyCollect">My Collect</a></li>
-      <li id="draft"><a onclick="see_draft()" data-toggle="tab" href="#MyDraft">My Draft</a></li>
-      <li id="friend"><a onclick="see_friend()" data-toggle="tab" href="#MyFriend">My Frined</a></li>
+      <li id="post" class="active"><a data-toggle="tab" href="#MyPost">My Post</a></li>
+      <li id="comment"><a data-toggle="tab" href="#MyComment">My Comment</a></li>
+      <li id="collect"><a data-toggle="tab" href="#MyCollect">My Collect</a></li>
+      <li id="draft"><a data-toggle="tab" href="#MyDraft">My Draft</a></li>
+      <li id="friend"><a data-toggle="tab" href="#MyFriend">My Frined</a></li>
     </ul>
 
 
@@ -68,6 +68,25 @@
       </div>
 
       <div id="MyDraft" class="tab-pane fade">
+        <table class="table table-striped ">
+          <thead>
+
+          </thead>
+          <tbody>
+            <% @drafts.each do |draft| %>
+            <tr>
+              <th scope="row"><%= draft.title %></th>
+              <td><%= draft.situation %></td>
+              <td><%= draft.created_at %></td>
+              <td>
+                <%= link_to 'Show', post_path(draft) %>
+                <%= link_to 'Edit', edit_post_path(draft) %>
+                <%= link_to 'Delete', post_path(draft), method: :delete, data: {confirm:"Are you sure?"} %>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
       </div>
 
       <div id="MyFriend" class="tab-pane fade">
@@ -80,22 +99,5 @@
   
 </div>
 <script>
-  function see_draft(){
-    var id = <%= @user.id %>
-    $.ajax({
-      url: "draft/",
-      method: "GET",
-      datatype: "json",
-      data: {
-        user: id
-      },
-      success: function(data) {
-        console.log(1);
- 
 
-      }
-
-    });
-
-  }
 </script>
