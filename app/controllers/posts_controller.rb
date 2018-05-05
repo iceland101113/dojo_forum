@@ -10,6 +10,7 @@ class PostsController < ApplicationController
     @post = @user.posts.build(post_params)
 
     if @post.save
+      @post.category_ids = params[:category_ids]
       flash[:notice] = "post was successfully created"
       if published?
         @post.situation = "Publish"
@@ -40,12 +41,13 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
     if @post.update(post_params)
       if published?
-        @post.situation = "Publish"
-        @post.save
+        @post.situation = "Publish"       
+      elsif draft?
+        @post.situation = "Draft"     
       else
-        @post.situation = "Draft"
-        @post.save
+
       end
+      @post.save
       redirect_to post_path(@post)
       flash[:notice] = "post was successfully updated"
     else
@@ -71,6 +73,11 @@ class PostsController < ApplicationController
   def published?
     params[:commit] == "Publish"
   end
+
+  def draft?
+    params[:commit] == "Draft"
+  end
+
 
 
 end
