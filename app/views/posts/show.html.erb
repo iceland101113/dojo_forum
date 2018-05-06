@@ -5,9 +5,13 @@
       <h4><%= @user.name %></h4>
     </div>
 
-    <div class="col-md-8">
+    <div class="col-md-8" style="border-left: 1px solid #ccc;">
+      <%= image_tag @post.image, class: "img-responsive center-block" %>
       <h2><%= @post.title %></h2>
       <p><%= @post.content %></p>
+      <%= link_to 'Edit', edit_post_path(@post), :class=>"btn btn-info" %>
+      <%= link_to 'Delete', post_path(@post), method: :delete, data: {confirm:"Are you sure?"}, :class=>"btn btn-info" %>
+
     </div>
 
   </div>

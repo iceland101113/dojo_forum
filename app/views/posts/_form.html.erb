@@ -37,9 +37,9 @@
 
       <div class="form-group">
         <div><strong>Category</strong></div>
-        <%= hidden_field_tag "post[category_ids][]", nil %>
+        <%= hidden_field_tag "posts[category_ids][]", nil %>
         <% Category.all.each do |category| %>
-          <%= check_box_tag "post[category_ids][]", category.id, @post.category_ids.include?(category.id) %>
+          <%= check_box_tag "posts[category_ids][]", category.id, @post.category_ids.include?(category.id) %>
           <%= category.name %><br>
         <% end %>
       </div>

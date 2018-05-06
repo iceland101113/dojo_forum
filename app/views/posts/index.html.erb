@@ -1,5 +1,51 @@
 <div class="container">
   <div class="row">
-    我是部落格首頁
+    <h1>我是部落格首頁</h1>
+    <br>
+    <table id="myTable" class="table table-striped table-bordered tablesorter">
+      <thead>
+        <tr>
+          <th>title</th>
+          <th>create time <i class="fa fa-fw fa-sort"></i></th> 
+          <th>View <i class="fa fa-fw fa-sort"></i></th>
+        </tr>
+      </thead>
 
+      <tbody>
+        <% @posts.each do |post| %>
+          <tr>
+            <th scope="row"><%= post.title %></th>
+            <td><%= post.created_at %></td>
+            <td><%= link_to '', post_path(post), class: "glyphicon glyphicon-eye-open" %> <%= post.viewed_count %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 </div>
+<script type="text/javascript">
+ 
+$(function(){
+
+$.tablesorter.themes.bootstrap = {
+    iconSortNone : 'bootstrap-icon-unsorted', // class name added to icon when column is not sorted
+    iconSortAsc  : '', // class name added to icon when column has ascending sort
+    iconSortDesc : '', // class name added to icon when column has descending sort
+};
+ 
+$("#myTable").tablesorter({
+  // this will apply the bootstrap theme if "uitheme" widget is included
+  // the widgetOptions.uitheme is no longer required to be set
+  theme : "bootstrap",
+  headerTemplate : '{content}    {icon}', // new in v2.7. Needed to add the bootstrap icon!
+
+  // widget code contained in the jquery.tablesorter.widgets.js file
+  // use the zebra stripe widget if you plan on hiding any rows (filter widget)
+  widgets : [ "uitheme"]  
+
+});
+ 
+
+});
+ 
+
+</script>

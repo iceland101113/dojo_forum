@@ -1,6 +1,15 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
 
+  def index
+    if current_user == nil
+      @posts = Post.where("authority = ? and situation = ?", "1", "Publish")
+    else
+      @user = current_user
+      @posts = Post.where("authority = ? and situation = ?", "1", "Publish") + Post.where("authority = ? and user_id = ? and situation = ?", "3", @user.id, "Publish")
+    end
+  end
+
   def new
     @post = Post.new
   end
@@ -8,9 +17,10 @@ class PostsController < ApplicationController
   def create
     @user = current_user
     @post = @user.posts.build(post_params)
+    @category = params[:posts][:category_ids]
+    @post.category_ids = @category
 
     if @post.save
-      @post.category_ids = params[:category_ids]
       flash[:notice] = "post was successfully created"
       if published?
         @post.situation = "Publish"
@@ -30,6 +40,8 @@ class PostsController < ApplicationController
 
   def show
     @post = Post.find(params[:id])
+    @post.viewed_count = @post.viewed_count + 1
+    @post.save
     @user = User.find(@post.user_id)
   end
 
@@ -39,6 +51,8 @@ class PostsController < ApplicationController
 
   def update
     @post = Post.find(params[:id])
+    @category = params[:posts][:category_ids]
+    @post.category_ids = @category
     if @post.update(post_params)
       if published?
         @post.situation = "Publish"       
@@ -67,7 +81,7 @@ class PostsController < ApplicationController
   private
 
   def post_params
-    params.require(:post).permit(:title, :content, :authority)
+    params.require(:post).permit(:title, :content, :authority, :image)
   end
 
   def published?
