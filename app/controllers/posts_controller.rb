@@ -43,6 +43,8 @@ class PostsController < ApplicationController
     @post.viewed_count = @post.viewed_count + 1
     @post.save
     @user = User.find(@post.user_id)
+    @reply = Reply.new
+    @replies = @post.replies.order(created_at: :desc)
   end
 
   def edit
