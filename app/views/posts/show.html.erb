@@ -1,41 +1,56 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-2">
-      <%= image_tag @user.avatar, class: "img-responsive center-block" %>
-      <h4><%= @user.name %></h4>
+<div style="border-bottom: 1px solid black;">
+  <h2 style="margin-left: 20px;"><%= @post.title %></h2>
+  <br>
+</div>
+
+  <div class="row" style="background-color: lightgrey;border-bottom: 1px solid black;">
+    <div class="col-md-2" style="text-align: center;">
+      <br>
+        <%= image_tag @user.avatar, class: "img-responsive center-block", style: "width:100px;"%>
+        <h4><%= link_to @user.name, user_path(@user) %></h4>
     </div>
 
-    <div class="col-md-8" style="border-left: 1px solid #ccc;">
-      <%= image_tag @post.image, class: "img-responsive center-block" %>
-      <h2><%= @post.title %></h2>
+    <div class="col-md-10" style="border-left: 1px solid black;">
+      <br>
+      <%= image_tag @post.image, class: "img-responsive center-block", style: "width:600px;" %>
+      <br>
       <p><%= @post.content %></p>
       <% if current_user==@user %>
-        <%= link_to 'Edit', edit_post_path(@post), :class=>"btn btn-info pull-right" %>
-        <%= link_to 'Delete', post_path(@post), method: :delete, data: {confirm:"Are you sure?"}, :class=>"btn btn-info pull-right" %>
+        <%= link_to 'Edit', edit_post_path(@post), :class=>"btn btn-info", :style=>"margin-bottom:10px" %>
+        <%= link_to 'Delete', post_path(@post), method: :delete, data: {confirm:"Are you sure?"}, :class=>"btn btn-info", :style=>"margin-bottom:10px" %>
+        <br>
       <% end %>
     </div>
-
+    <br>
   </div>
 
+
     <% @replies.each do |reply| %>
-    <div class="row">
-        <div class="col-md-2">
-          <%= image_tag reply.user.avatar, class: "img-responsive center-block" %>
+    <div class="row" style="border-bottom: 1px solid black;">
+      <br>
+        <div class="col-md-2" style="text-align: center;">
+            
+            <%= image_tag reply.user.avatar, class: "img-responsive center-block", style: "width:100px;" %>
+             <h4><%= link_to reply.user.name, user_path(reply.user) %> </h4>
+            <br>
         </div>
-        <div class="col-md-8" style="border-left: 1px solid #ccc;">
-            <h4><%= link_to reply.user.name, user_path(reply.user) %> <small><%= reply.created_at.strftime('%F') %>, <%= reply.created_at.strftime('%H:%M') %></small></h4>
-            <p><%= simple_format reply.content %></p>
-            <% if current_user==reply.user || current_user==@post.user %>
-              <%= link_to 'Edit', post_reply_path(@post, reply), :class=>"btn btn-info pull-right" %>
-              <%= link_to "Delete", post_reply_path(@post, reply), method: :delete, data: {confirm:"Are you sure?"}, :class=>"btn btn-info pull-right" %>         
-            <% end %>
+        <div class="col-md-10">
+          <h4><small><%= reply.created_at.strftime('%F') %>, <%= reply.created_at.strftime('%H:%M') %></small></h4>
+          <p><%= simple_format reply.content %></p>
+          <% if current_user==reply.user || current_user==@post.user %>
+            <%= link_to 'Edit', post_reply_path(@post, reply), :class=>"btn btn-info", :style=>"margin-bottom:10px"  %>
+            <%= link_to "Delete", post_reply_path(@post, reply), method: :delete, data: {confirm:"Are you sure?"}, :class=>"btn btn-info", :style=>"margin-bottom:10px"  %>         
+          <% end %>
         </div>
       </div>
     <% end %>
 
-  <br>
-  <hr>
-  <div class="row">
+  
+  
+
+  <div class="row" style="background-color: lightgrey;">
+    <div class="container">
+    <br>
     <%= form_for [@post, @reply] do |f| %>
       <div class="form-group">
         <%= f.text_area :content, placeholder: "你想說什麼？",  class: "form-control", style: "width:100%;height:100px"  %>
@@ -47,5 +62,5 @@
           <%= @reply.errors.full_messages.to_sentence %>
         <% end %>
     <% end %> 
+    </div>
   </div>
-</div>
