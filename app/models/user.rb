@@ -7,6 +7,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :posts, dependent: :destroy 
+  has_many :replies
 
   def admin?
     self.role_id == 2
