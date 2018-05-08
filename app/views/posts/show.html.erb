@@ -14,12 +14,12 @@
       <br>
       <%= image_tag @post.image, class: "img-responsive center-block", style: "width:600px;" %>
       <br>
-      <p><%= @post.content %></p>
-      <% if current_user==@user %>
-        <%= link_to 'Edit', edit_post_path(@post), :class=>"btn btn-info", :style=>"margin-bottom:10px" %>
-        <%= link_to 'Delete', post_path(@post), method: :delete, data: {confirm:"Are you sure?"}, :class=>"btn btn-info", :style=>"margin-bottom:10px" %>
-        <br>
-      <% end %>
+        <p><%= @post.content %></p>
+        <% if current_user==@user %>
+          <%= link_to 'Edit', post_path(@post), :class=>"btn btn-info", :style=>"margin-bottom:10px"  %>
+          <%= link_to 'Delete', post_path(@post), method: :delete, data: {confirm:"Are you sure?"}, :class=>"btn btn-info", :style=>"margin-bottom:10px" %>
+          <br>
+        <% end %>
     </div>
     <br>
   </div>
@@ -34,13 +34,15 @@
              <h4><%= link_to reply.user.name, user_path(reply.user) %> </h4>
             <br>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-10" id="<%= reply.id %>">
           <h4><small><%= reply.created_at.strftime('%F') %>, <%= reply.created_at.strftime('%H:%M') %></small></h4>
-          <p><%= simple_format reply.content %></p>
-          <% if current_user==reply.user || current_user==@post.user %>
-            <%= link_to 'Edit', post_reply_path(@post, reply), :class=>"btn btn-info", :style=>"margin-bottom:10px"  %>
-            <%= link_to "Delete", post_reply_path(@post, reply), method: :delete, data: {confirm:"Are you sure?"}, :class=>"btn btn-info", :style=>"margin-bottom:10px"  %>         
-          <% end %>
+          <div class="content">
+            <p><%= simple_format reply.content %></p>
+          </div>
+            <% if current_user==reply.user || current_user==@post.user %>
+              <button id="<%= reply.post_id %>" type="button" class="edit-post btn btn-info" style="margin-bottom:10px;">Edit</button>
+              <%= link_to "Delete", post_reply_path(@post, reply), method: :delete, data: {confirm:"Are you sure?"}, :class=>"btn btn-info", :style=>"margin-bottom:10px"  %>         
+            <% end %>
         </div>
       </div>
     <% end %>
@@ -64,3 +66,52 @@
     <% end %> 
     </div>
   </div>
+
+<script>
+
+  $(".edit-post").on("click", function(event){
+    var id = event.target.parentNode.id;
+    var p_id = event.target.id;
+    $.ajax({
+      url: p_id + "/replies/" + id + "/edit",
+      method: "GET",
+      datatype: "json",
+      success: function(data) {
+        var textColumn = $("#" + data["id"]).find(".content");
+        textColumn.html($("#edit-template").html());
+        textColumn.find(".update-title").val(data["content"]);
+        textColumn.on("click", ".update-button", function(updateEvent){
+          updateEvent.preventDefault();
+
+          $.ajax({
+            url: data["p_id"] + "/replies/" + data["id"],
+            method: "PATCH",
+            datatype: "json",
+            data: {
+                content: textColumn.find(".update-title").val()
+            },
+            success: function(updateData){
+              var textColumn = $("#" + data["id"]).find(".content");
+              textColumn.html('<p></p>');
+              textColumn.find('p').html(updateData["content"]);
+            }
+
+          });
+        });
+      }
+
+    });
+
+  });
+</script>
+
+<script type="text/template" id="edit-template">
+  <form>      
+    <div class="input-group">
+      <input type="text-area" class="update-title form-control">
+      <div class="input-group-addon">
+        <button class="update-button my-btn my-btn-transparent">Update</button>
+      </div>
+    </div>
+  </form>
+</script>

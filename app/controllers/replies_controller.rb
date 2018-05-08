@@ -1,5 +1,6 @@
 class RepliesController < ApplicationController
-  before_action :authenticate_user! 
+  protect_from_forgery with: :null_session
+  before_action :authenticate_user!, only: [:create, :edit, :destroy]
   before_action :set_reply
 
   def create
@@ -17,8 +18,15 @@ class RepliesController < ApplicationController
 
   end
 
-  def update
+  def edit
+    @reply = Reply.find(params[:id])
+    render :json => { :id => @reply.id, :content => @reply.content, :p_id => @reply.post_id }
+  end
 
+  def update
+    @reply = Reply.find(params[:id])
+    @reply.update_attributes(content: params[:content])
+    render :json => { :id => @reply.id, :content => @reply.content }
   end
 
   def destroy

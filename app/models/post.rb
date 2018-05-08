@@ -3,7 +3,7 @@ class Post < ApplicationRecord
   has_many :categorizations
   has_many :categories, through: :categorizations
   belongs_to :user
-  has_many :replies
+  has_many :replies, dependent: :destroy 
 
   def is_published?
     self.situation == "Publish"

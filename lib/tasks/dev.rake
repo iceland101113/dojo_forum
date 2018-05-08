@@ -29,12 +29,13 @@ namespace :dev do
           np = rand(1..3)
           s = ["Publish", "Draft"] 
           sn = rand(1..2)
+          file = File.open("#{Rails.root}/public/image/p#{i+1}.jpg")
           npost = user.posts.create!(
             content: FFaker::Lorem.sentence(50),
             title: FFaker::Lorem.sentence(6),
             authority: np.to_s,
-            situation: s[sn-1]
-
+            situation: s[sn-1],
+            image: file
             )
           npost.category_ids = c[np]
           npost.save
