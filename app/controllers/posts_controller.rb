@@ -3,10 +3,11 @@ class PostsController < ApplicationController
 
   def index
     if current_user == nil
-      @posts = Post.where("authority = ? and situation = ?", "1", "Publish")
+      @posts = Post.where("authority = ? and situation = ?", "1", "Publish").page(params[:page]).per(10)
     else
       @user = current_user
       @posts = Post.where("authority = ? and situation = ?", "1", "Publish") + Post.where("authority = ? and user_id = ? and situation = ?", "3", @user.id, "Publish")
+      
     end
   end
 
