@@ -4,6 +4,7 @@ class UsersController < ApplicationController
   def show
     @posts = Post.where("situation = ? and user_id = ?", "Publish", @user.id)
     @drafts = Post.where("situation = ? and user_id = ?", "Draft", @user.id)
+    @replies = Reply.where("user_id = ?", @user.id)
   end
 
   def draft

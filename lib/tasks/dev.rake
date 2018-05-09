@@ -46,6 +46,7 @@ namespace :dev do
   end  
 
   task fake_replies: :environment do
+    Reply.destroy_all
       Post.all.each do |post|
         n = rand(2..9)
         n.times do |i|
