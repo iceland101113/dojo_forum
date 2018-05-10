@@ -3,6 +3,12 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   resources :posts do
     resources :replies, only: [:create, :edit, :update, :destroy]
+
+    member do
+      # 其他程式碼
+      post :collect
+      post :uncollect
+    end
   end
 
   
