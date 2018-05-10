@@ -4,6 +4,8 @@ class Post < ApplicationRecord
   has_many :categories, through: :categorizations
   belongs_to :user
   has_many :replies, dependent: :destroy 
+  has_many :collections, dependent: :destroy
+  has_many :collect_users, through: :collections, source: :user
 
   def is_published?
     self.situation == "Publish"

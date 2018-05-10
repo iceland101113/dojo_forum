@@ -8,6 +8,8 @@ class User < ApplicationRecord
 
   has_many :posts, dependent: :destroy 
   has_many :replies
+  has_many :collections, dependent: :destroy
+  has_many :collect_posts, through: :collections, source: :post
 
   def admin?
     self.role_id == 2
