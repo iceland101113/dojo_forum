@@ -1,6 +1,6 @@
 class RepliesController < ApplicationController
   protect_from_forgery with: :null_session
-  before_action :authenticate_user!, only: [:create, :edit, :destroy]
+  before_action :authenticate_user!, only: [:create, :edit]
   before_action :set_reply
 
   def create
@@ -30,9 +30,8 @@ class RepliesController < ApplicationController
   end
 
   def destroy
-    @post = Post.find(params[:post_id])
     @reply.destroy
-    redirect_to post_path(@post) 
+    render :json => { :id => @reply.id }
   end
 
   private

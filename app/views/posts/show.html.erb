@@ -26,7 +26,7 @@
 
 
     <% @replies.each do |reply| %>
-    <div class="row" style="border-bottom: 1px solid black;">
+    <div class="row" id="<%= reply.id %>" style="border-bottom: 1px solid black;">
       <br>
         <div class="col-md-2" style="text-align: center;">
             
@@ -34,14 +34,14 @@
              <h4><%= link_to reply.user.name, user_path(reply.user) %> </h4>
             <br>
         </div>
-        <div class="col-md-10" id="<%= reply.id %>">
+        <div class="col-md-10">
           <h4><small><%= reply.created_at.strftime('%F') %>, <%= reply.created_at.strftime('%H:%M') %></small></h4>
           <div class="content">
             <p><%= simple_format reply.content %></p>
           </div>
             <% if current_user==reply.user || current_user==@post.user %>
               <button id="<%= reply.post_id %>" type="button" class="edit-post btn btn-info" style="margin-bottom:10px;">Edit</button>
-              <%= link_to "Delete", post_reply_path(@post, reply), method: :delete, data: {confirm:"Are you sure?"}, :class=>"btn btn-info", :style=>"margin-bottom:10px"  %>         
+              <button id="<%= reply.post_id %>" type="button" class="delete-todo btn btn-info" style="margin-bottom:10px;">Delete</button>        
             <% end %>
         </div>
       </div>
@@ -70,7 +70,7 @@
 <script>
 
   $(".edit-post").on("click", function(event){
-    var id = event.target.parentNode.id;
+    var id = event.target.parentNode.parentNode.id;
     var p_id = event.target.id;
     $.ajax({
       url: p_id + "/replies/" + id + "/edit",
@@ -102,6 +102,21 @@
 
     });
 
+  });
+
+  $(".delete-todo").on("click", function(event) {
+    var id = event.target.parentNode.parentNode.id;
+    var p_id = event.target.id;
+    console.log(id);
+    confirm("Are you sure?");
+    $.ajax({
+      url: p_id + "/replies/" + id ,
+      method: "DELETE",
+      dataType: "json",
+      success: function(data) {
+        $("#" + data["id"]).remove();
+      }
+    });  
   });
 </script>
 

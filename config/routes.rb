@@ -4,12 +4,16 @@ Rails.application.routes.draw do
   resources :posts do
     resources :replies, only: [:create, :edit, :update, :destroy]
   end
+
   
   root "posts#index"
 
   get "draft", to: "users#draft"
+
   
-  resources :users, only: [:show, :edit, :update] 
+  resources :users, only: [:show, :edit, :update] do
+    resources :replies, only: [:edit, :update, :destroy]
+  end
 
   namespace :admin do
     resources :categories   

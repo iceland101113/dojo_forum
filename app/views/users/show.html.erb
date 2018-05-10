@@ -62,19 +62,14 @@
       </div>
 
       <div id="MyComment" class="tab-pane fade">
-        <table class="table table-striped ">
-          <thead>
-
-          </thead>
-           <tbody>
             <% @replies.each do |reply| %>
-            <tr>
-              <th scope="row"><h4><%= reply.post.title %></h4><p><%= reply.content %></p></th>
-              <td><button type="button" class="edit-post btn btn-info">Edit</button></td>
-            </tr>
+            <div id="<%= reply.id %>">
+              <h4><%= reply.post.title %></h4>
+              <div class="content"><p><%= reply.content %></p></div>
+              <button id="<%= reply.user_id %>" type="button" class="edit-post btn btn-info" style="margin-bottom:10px;">Edit</button>
+              <button id="<%= reply.user_id%>" type="button" class="delete-todo btn btn-info" style="margin-bottom:10px;">Delete</button>
+            </div>
             <% end %>
-          </tbody>
-        </table>
       </div>
 
       <div id="MyCollect" class="tab-pane fade">
@@ -113,4 +108,65 @@
 </div>
 <script>
 
+  $(".edit-post").on("click", function(event){
+    var id = event.target.parentNode.id;
+    var u_id = event.target.id;
+    console.log(id);
+    $.ajax({
+      url:  u_id + "/replies/" + id + "/edit",
+      method: "GET",
+      datatype: "json",
+      success: function(data) {
+        var textColumn = $("#" + data["id"]).find(".content");
+        textColumn.html($("#edit-template").html());
+        textColumn.find(".update-title").val(data["content"]);
+        textColumn.on("click", ".update-button", function(updateEvent){
+          updateEvent.preventDefault();
+
+          $.ajax({
+            url:  data["u_id"] + "/replies/" + data["id"],
+            method: "PATCH",
+            datatype: "json",
+            data: {
+                content: textColumn.find(".update-title").val()
+            },
+            success: function(updateData){
+              var textColumn = $("#" + data["id"]).find(".content");
+              textColumn.html('<p></p>');
+              textColumn.find('p').html(updateData["content"]);
+            }
+
+          });
+        });
+      }
+
+    });
+
+  });
+
+  $(".delete-todo").on("click", function(event) {
+    var id = event.target.parentNode.id;
+    var u_id = event.target.id;
+    console.log(id);
+    confirm("Are you sure?");
+    $.ajax({
+      url: u_id + "/replies/" + id,
+      method: "DELETE",
+      dataType: "json",
+      success: function(data) {
+        $("#" + data["id"]).remove();
+      }
+    });  
+  });
+</script>
+
+<script type="text/template" id="edit-template">
+  <form>      
+    <div class="input-group">
+      <input type="text-area" class="update-title form-control">
+      <div class="input-group-addon">
+        <button class="update-button my-btn my-btn-transparent">Update</button>
+      </div>
+    </div>
+  </form>
 </script>
