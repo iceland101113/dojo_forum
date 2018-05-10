@@ -11,4 +11,8 @@ class Post < ApplicationRecord
     self.situation == "Publish"
   end
 
+  def is_collected?(user)
+    self.collect_users.include?(user)
+  end
+
 end

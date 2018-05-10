@@ -1,6 +1,11 @@
-<div style="border-bottom: 1px solid black;">
+<div id="<%= current_user.id %>" style="border-bottom: 1px solid black;">
   <h2 style="margin-left: 20px;"><%= @post.title %></h2>
   <br>
+  <% if @post.is_collected?(current_user) %>
+    <button id="<%= @post.id %>" type="button" class="collect-post btn btn-info" style="margin-bottom:10px;margin-left: 20px;">Uncollect</button>
+  <% else %> 
+    <button id="<%= @post.id %>" type="button" class="collect-post btn btn-info" style="margin-bottom:10px;margin-left: 20px;">Collect</button>
+  <% end %> 
 </div>
 
   <div class="row" style="background-color: lightgrey;border-bottom: 1px solid black;">
@@ -110,13 +115,58 @@
     console.log(id);
     confirm("Are you sure?");
     $.ajax({
-      url: p_id + "/replies/" + id ,
+      url: p_id + "/replies/" + id,
       method: "DELETE",
       dataType: "json",
       success: function(data) {
         $("#" + data["id"]).remove();
       }
     });  
+  });
+
+  $(".collect-post").on("click", function(event){
+    var id = event.target.id;
+    var u_id = event.target.parentNode.id;
+    $.ajax({
+      url: id + "/collect",
+      method: "POST",
+      dataType: "json",
+      data: {
+        id: id,
+        user: u_id
+      },
+      success: function(data) {
+        console.log(data["id"]);
+        var textColumn = $(".collect-post");
+        textColumn.html(data["tag"]);
+
+        
+      }
+
+    });
+  });
+
+  $(".uncollect-post").on("click", function(event){
+    var id = event.target.id;
+    var u_id = event.target.parentNode.id;
+    $.ajax({
+      url: id + "/uncollect",
+      method: "POST",
+      dataType: "json",
+      data: {
+        id: id,
+        user: u_id
+      },
+      success: function(data) {
+        console.log(data["id"]);
+        var textColumn = $(".uncollect-post");
+        textColumn.html('Collect');
+        textColumn.removeClass("uncollect-post");
+        textColumn.addClass("collect-post");
+        
+      }
+
+    });
   });
 </script>
 

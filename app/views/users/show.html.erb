@@ -73,6 +73,20 @@
       </div>
 
       <div id="MyCollect" class="tab-pane fade">
+        <div id="<%= current_user.id %>">
+          <% @collects.each do |collect| %>
+          <div id="<%= collect.id %>collect"> 
+          <div id="<%= collect.id %>">
+            <h4><%= collect.title %></h4>
+            <% if collect.is_collected?(current_user) %>
+              <button type="button" id="<%= collect.id %>collect-post" class="collect-post btn btn-info" style="margin-bottom:10px;margin-left: 20px;">Uncollect</button>
+            <% else %> 
+              <button type="button" id="<%= collect.id %>collect-post" class="collect-post btn btn-info" style="margin-bottom:10px;margin-left: 20px;">Collect</button>
+            <% end %>
+          </div>
+          </div>
+          <% end %>
+        </div>
       </div>
 
       <div id="MyDraft" class="tab-pane fade">
@@ -157,6 +171,29 @@
         $("#" + data["id"]).remove();
       }
     });  
+  });
+
+  $(".collect-post").on("click", function(event){
+    var id = event.target.parentNode.id;
+    var u_id = event.target.parentNode.parentNode.parentNode.id;
+    $.ajax({
+      url: u_id + "/collect",
+      method: "POST",
+      dataType: "json",
+      data: {
+        post_id: id,
+        user: u_id
+      },
+      success: function(data) {
+        console.log(data["id"]);
+        var textColumn = $("#"+ id +"collect-post");
+        textColumn.html(data["tag"]);
+        if (data["tag"]=="Collect") {
+          $("#"+id+"collect").remove();
+          
+        }        
+      }
+    });
   });
 </script>
 

@@ -1,5 +1,6 @@
 class PostsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create]
+  protect_from_forgery with: :null_session
+  before_action :authenticate_user!, only: [:new, :create, :show]
 
   def index
     if current_user == nil
@@ -79,6 +80,19 @@ class PostsController < ApplicationController
     @post.destroy
     redirect_to user_path(@user)
     flash[:alert] = "post was deleted"
+  end
+
+  def collect
+    @user = User.find(params[:user])
+    @post = Post.find(params[:id])
+    if @post.is_collected?(@user)
+      @collection = Collection.where(user_id: params[:user], post_id: params[:id])
+      @collection.destroy_all
+      render :json => { :tag => "Collect", :id => 1 }
+    else
+      @collection = Collection.create!(user_id: params[:user], post_id: params[:id])   
+      render :json => { :tag => "Uncollect", :id => 2 }
+    end
   end
 
   private

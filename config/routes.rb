@@ -5,9 +5,7 @@ Rails.application.routes.draw do
     resources :replies, only: [:create, :edit, :update, :destroy]
 
     member do
-      # 其他程式碼
       post :collect
-      post :uncollect
     end
   end
 
@@ -19,6 +17,11 @@ Rails.application.routes.draw do
   
   resources :users, only: [:show, :edit, :update] do
     resources :replies, only: [:edit, :update, :destroy]
+
+    member do
+      post :collect
+    end
+
   end
 
   namespace :admin do
