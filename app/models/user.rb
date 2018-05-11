@@ -11,6 +11,9 @@ class User < ApplicationRecord
   has_many :collections, dependent: :destroy
   has_many :collect_posts, through: :collections, source: :post
 
+  has_many :friends, dependent: :destroy
+  has_many :friendships, through: :friends
+
   def admin?
     self.role_id == 2
   end
