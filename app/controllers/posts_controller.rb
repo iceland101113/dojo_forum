@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   protect_from_forgery with: :null_session
-  before_action :authenticate_user!, only: [:new, :create, :show]
+  before_action :authenticate_user!, only: [:new, :create, :show, :feeds]
   before_action :set_user, only: [:new, :create]
 
   def index
@@ -93,6 +93,15 @@ class PostsController < ApplicationController
       @collection = Collection.create!(user_id: params[:user], post_id: params[:id])   
       render :json => { :tag => "Uncollect", :id => 2 }
     end
+  end
+
+  def feeds
+    @users = User.all.size
+    @posts = Post.all.size
+    @comments = Reply.all.size
+
+    @top_posts = Post.order(replies_count: :desc).limit(10)
+    @top_users = User.order(replies_count: :desc).limit(10)
   end
 
   private
