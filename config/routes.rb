@@ -7,6 +7,10 @@ Rails.application.routes.draw do
     member do
       post :collect
     end
+
+    collection do
+      get :feeds
+    end
   end
 
   
