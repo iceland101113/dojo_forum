@@ -7,6 +7,48 @@ class UsersController < ApplicationController
     @drafts = Post.where("situation = ? and user_id = ?", "Draft", @user.id)
     @replies = Reply.where("user_id = ?", @user.id)
     @collects = @user.collect_posts.all
+    u = Friendship.where("user_id = ? and friend_id = ?", @user.id, current_user.id)
+    f = Friendship.where("user_id = ? and friend_id = ?", current_user.id, @user.id)
+    
+    if u != []
+      @status_u = u.last.status
+    else
+      @status_u = []
+    end
+
+    if f != []
+      @status_f = f.last.status
+    else
+      @status_f = []
+    end
+
+    
+    find_friends = @user.friendships
+    @friends = []
+    @nfriends = []
+    find_friends.each do |friend|
+        wfriend = User.find(friend.friend_id)
+      if friend.status == 1 
+        @friends[@friends.size] = wfriend
+      else
+        @nfriends[@nfriends.size] = wfriend
+      end
+    end
+
+    
+
+    find_infriends = @user.inverse_friendships
+    @rfriends = []
+    find_infriends.each do |infriend|
+        winfriend = User.find(infriend.user_id)
+      if infriend.status == 1
+        @friends[@friends.size] = winfriend
+      elsif infriend.status == nil
+        @rfriends[@rfriends.size] = winfriend
+      else
+      end
+    end
+
   end
 
   def draft
@@ -35,6 +77,39 @@ class UsersController < ApplicationController
       @collection = Collection.create!(user_id: params[:user], post_id: params[:post_id])   
       render :json => { :tag => "Uncollect", :id => 2 }
     end
+  end
+
+  def friend
+    @tag = params[:tag]
+    if @tag == "Add Friend"
+      @in_friend = Friendship.where(user_id: params[:user], friend_id: params[:id])
+      if @in_friend != []
+        @in_friend.destroy
+      end
+      @friends = Friendship.create!(user_id: params[:user], friend_id: params[:id]) 
+      render :json => { :tag => "Waiting", :id => 1 }
+    else
+      @friends = Friendship.where(user_id: params[:user], friend_id: params[:id])
+      @friends.destroy_all     
+      render :json => { :tag => "Add friend", :id => 2 }
+    end
+
+  end
+
+  def accept
+    friendship = Friendship.where(user_id:params[:friend], friend_id:params[:user]).last
+    friendship.status = 1
+    friendship.save
+    friend = User.find(params[:friend])
+    render :json => { :f_id => params[:friend], :avatar => friend.avatar, :name => friend.name }
+  end
+
+  def ignore
+    friendship = Friendship.where(user_id:params[:friend], friend_id:params[:user]).last
+    friendship.status = 0
+    friendship.save
+    friend = User.find(params[:friend])
+    render :json => { :f_id => params[:friend], :avatar => friend.avatar, :name => friend.name }
   end
 
   private

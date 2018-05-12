@@ -1,14 +1,14 @@
 class PostsController < ApplicationController
   protect_from_forgery with: :null_session
   before_action :authenticate_user!, only: [:new, :create, :show]
+  before_action :set_user, only: [:new, :create]
 
   def index
     if current_user == nil
-      @posts = Post.where("authority = ? and situation = ?", "1", "Publish").page(params[:page]).per(10)
+      @posts = Post.where("authority = ? and situation = ?", "1", "Publish").page(params[:page]).per(20)
     else
       @user = current_user
-      @posts = Post.where("authority = ? and situation = ?", "1", "Publish") + Post.where("authority = ? and user_id = ? and situation = ?", "3", @user.id, "Publish")
-      
+      @posts = Post.where(authority: ["1","3"], situation: "Publish")
     end
   end
 
@@ -17,7 +17,6 @@ class PostsController < ApplicationController
   end
 
   def create
-    @user = current_user
     @post = @user.posts.build(post_params)
     @category = params[:posts][:category_ids]
     @post.category_ids = @category
@@ -50,10 +49,12 @@ class PostsController < ApplicationController
   end
 
   def edit
+    @user = current_user
     @post = Post.find(params[:id])
   end
 
   def update
+    @user = current_user
     @post = Post.find(params[:id])
     @category = params[:posts][:category_ids]
     @post.category_ids = @category
@@ -75,10 +76,9 @@ class PostsController < ApplicationController
   end
 
   def destroy
-    @user = current_user
     @post = Post.find(params[:id])
     @post.destroy
-    redirect_to user_path(@user)
+    redirect_to root_path
     flash[:alert] = "post was deleted"
   end
 
@@ -96,6 +96,14 @@ class PostsController < ApplicationController
   end
 
   private
+
+  def set_user
+    if  params[:id]
+      @user = User.find(params[:id])
+    else
+      @user = current_user
+    end
+  end
 
   def post_params
     params.require(:post).permit(:title, :content, :authority, :image)

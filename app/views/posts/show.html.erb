@@ -20,8 +20,10 @@
       <%= image_tag @post.image, class: "img-responsive center-block", style: "width:600px;" %>
       <br>
         <p><%= @post.content %></p>
-        <% if current_user==@user %>
-          <%= link_to 'Edit', post_path(@post), :class=>"btn btn-info", :style=>"margin-bottom:10px"  %>
+        <% if current_user == @user %>
+          <%= link_to 'Edit', edit_post_path(@post), :class=>"btn btn-info", :style=>"margin-bottom:10px"  %>
+        <% end %>
+        <% if current_user == @user || current_user.admin? %>
           <%= link_to 'Delete', post_path(@post), method: :delete, data: {confirm:"Are you sure?"}, :class=>"btn btn-info", :style=>"margin-bottom:10px" %>
           <br>
         <% end %>

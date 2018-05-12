@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="row">
+  <div class="row" id="<%= @user.id %>">
       <div class="col-md-4">
         <% if @user.avatar == nil %>
           <h1>尚無照片</h1>
@@ -21,7 +21,37 @@
         <% end %>
         <hr>
         <% if @user == current_user %>
+
           <%= link_to 'Edit Profile', edit_user_path(@user), class: "btn btn-primary" %>
+
+        <% elsif @user.is_friend?(current_user) && @status_u == 1 %>
+
+          <button id="<%= current_user.id %>" type="button" class="friend btn btn-info" style="margin-bottom:10px;margin-left: 20px;">UnFriend</button>
+
+        <% elsif current_user.is_friend?(@user) && @status_f == 1 %>
+
+          <button id="<%= current_user.id %>" type="button" class="friend btn btn-info" style="margin-bottom:10px;margin-left: 20px;">UnFriend</button>  
+
+        <% elsif @user.is_friend?(current_user) && @status_u == 0 %>    
+
+          <button id="<%= current_user.id %>" type="button" class="friend btn btn-info" style="margin-bottom:10px;margin-left: 20px;">Add Friend</button>
+
+        <% elsif current_user.is_friend?(@user) && @status_f == 0 %>
+
+          <button id="<%= current_user.id %>" type="button" disabled class="friend btn btn-info" style="margin-bottom:10px;margin-left: 20px;">Waiting</button>
+
+        <% elsif @user.is_friend?(current_user) %> 
+      
+          <button id="<%= current_user.id %>" type="button" disabled class="friend btn btn-info" style="margin-bottom:10px;margin-left: 20px;">Have sent you invite</button>     
+
+        <% elsif current_user.is_friend?(@user) %>
+
+          <button id="<%= current_user.id %>" type="button" disabled class="friend btn btn-info" style="margin-bottom:10px;margin-left: 20px;">Waiting</button>
+        
+        <% else %>
+
+          <button id="<%= current_user.id %>" type="button" class="friend btn btn-info" style="margin-bottom:10px;margin-left: 20px;">Add Friend</button>
+
         <% end %>
       </div>
   </div>
@@ -52,8 +82,10 @@
               <td><%= post.created_at %></td>
               <td>
                 <%= link_to 'Show', post_path(post) %>
-                <%= link_to 'Edit', edit_post_path(post) %>
-                <%= link_to 'Delete', post_path(post), method: :delete, data: {confirm:"Are you sure?"} %>
+                <% if current_user == @user %>
+                  <%= link_to 'Edit', edit_post_path(post) %>
+                  <%= link_to 'Delete', post_path(post), method: :delete, data: {confirm:"Are you sure?"} %>
+                <% end %>
               </td>
             </tr>
             <% end %>
@@ -112,6 +144,44 @@
       </div>
 
       <div id="MyFriend" class="tab-pane fade">
+        <div class="row" style="background-color: #E8E8E8">
+          <h3 style="text-align: center;"> Waiting for response </h3>
+          <% @nfriends.each do |nfriend| %>
+              <div class="col-sm-1 col-md-1">
+                <div style="text-align: center;margin-bottom: 20px;">
+                  <%= image_tag nfriend.avatar, class: "img-responsive center-block" %>
+                  <%= nfriend.name %>
+                </div>
+              </div>
+          <% end %>
+        </div>
+
+        <div class="row" style="background-color: lightgrey">
+          <h3 style="text-align: center;"> Invite you become friend </h3>
+          <% @rfriends.each do |rfriend| %>
+              <div id="<%= rfriend.id %>infriend" class="infriend col-sm-1 col-md-1">
+                <div id="<%= rfriend.id %>" style="text-align: center;margin-bottom: 20px;">
+                  <%= image_tag rfriend.avatar, class: "img-responsive center-block" %>
+                  <%= rfriend.name %>
+                  <button id="<%= @user.id %>" type="button" class="accept btn btn-info" style="margin-bottom:10px;">Accept</button>
+                  <button id="<%= @user.id %>" type="button" class="ignore btn btn-info" style="margin-bottom:10px;">Ignore</button>
+                </div>
+              </div>
+          <% end %>          
+        </div>
+
+        <div class="row allfriend" style="background-color: #E8E8E8">
+          <h3 style="text-align: center;"> All my friend </h3>
+          <% @friends.each do |friend| %>
+              <div class="col-sm-1 col-md-1">
+                <div style="text-align: center;margin-bottom: 20px;">
+                  <%= image_tag friend.avatar, class: "img-responsive center-block" %>
+                  <%= friend.name %>
+                </div>
+              </div>
+          <% end %>          
+        </div>
+
       </div>
 
     </div>
@@ -195,6 +265,78 @@
       }
     });
   });
+
+  $(".friend").on("click", function(event){
+    var u_id = event.target.id;
+    var id = event.target.parentNode.parentNode.id;
+    var tag = event.target.innerHTML;
+    console.log(tag);
+    $.ajax({
+      url: id + "/friend",
+      method: "POST",
+      dataType: "json",
+      data: {
+        id: id,
+        user: u_id,
+        tag: tag
+      },
+      success: function(data) {
+        console.log(data["id"]);
+        console.log(data["tag"]);
+        if (data["tag"]=="Waiting" ){
+          $(".friend").html(data["tag"]);
+          $(".friend").attr('disabled', true);
+        } else {
+          $(".friend").html(data["tag"]);
+        } 
+
+      }
+      
+    });
+  });
+
+  $(".accept").on("click", function(event){
+    var u_id = event.target.id;
+    var f_id = event.target.parentNode.id;
+    $.ajax({
+      url: "/users/" + u_id + "/accept",
+      method: "POST",
+      dataType: "json",
+      data: {
+        user: u_id,
+        friend: f_id
+      },
+      success: function(data) {
+        console.log(1);
+        $("#" + data["f_id"] + "infriend").remove();
+        $(".allfriend").append("<div class='col-sm-1 col-md-1'><div style='text-align: center;margin-bottom: 20px;'><img class='img-responsive center-block' src=" + data["avatar"] + " >" + data["name"] + "</div></div>");
+        
+
+      }
+
+    });
+  });
+
+  $(".ignore").on("click", function(event){
+    var u_id = event.target.id;
+    var f_id = event.target.parentNode.id;
+    $.ajax({
+      url: "/users/" + u_id + "/ignore",
+      method: "POST",
+      dataType: "json",
+      data: {
+        user: u_id,
+        friend: f_id
+      },
+      success: function(data) {
+        console.log(1);
+        $("#" + data["f_id"] + "infriend").remove();   
+
+      }
+
+    });
+  });
+
 </script>
 
 <script type="text/template" id="edit-template">

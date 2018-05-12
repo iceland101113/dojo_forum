@@ -20,6 +20,9 @@ Rails.application.routes.draw do
 
     member do
       post :collect
+      post :friend
+      post :accept
+      post :ignore
     end
 
   end
