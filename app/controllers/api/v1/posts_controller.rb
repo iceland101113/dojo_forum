@@ -1,5 +1,5 @@
 class Api::V1::PostsController < ApiController
-  before_action :authenticate_user!, only: [:show, :destroy, :create, :update]
+  before_action :authenticate_user!, except: :index
 
   def index
     @posts = Post.all
@@ -7,7 +7,7 @@ class Api::V1::PostsController < ApiController
   end
 
   def show
-    @post = Post.find(params[:id])
+    @post = Post.find_by(id: params[:id])
     if !@post
       render json: {
         message: "Can't find the post!",
