@@ -3,7 +3,29 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update]
 
   def show
-    @posts = Post.where("situation = ? and user_id = ?", "Publish", @user.id)
+
+    if @user == current_user
+      @posts = Post.where("situation = ? and user_id = ?", "Publish", @user.id)
+    elsif @user.is_friend?(current_user) 
+      friendship = Friendship.where(user_id:@user.id, friend_id:current_user.id).last
+      if friendship.status == 1
+        @posts = Post.where(situation:"Publish", user_id: @user.id, authority: ["1","2"])
+      else
+        @posts = Post.where("situation = ? and user_id = ? and authority = ?", "Publish", @user.id, "1")
+      end
+    elsif current_user.is_friend?(@user)
+      friendship = Friendship.where(user_id:current_user.id, friend_id:@user.id).last
+      if friendship.status == 1
+        @posts = Post.where(situation:"Publish", user_id: @user.id, authority:["1","2"])
+      else
+        @posts = Post.where("situation = ? and user_id = ? and authority = ?", "Publish", @user.id, "1")
+      end
+    else
+      @posts = Post.where("situation = ? and user_id = ? and authority = ?", "Publish", @user.id, "1")
+    end    
+
+
+
     @drafts = Post.where("situation = ? and user_id = ?", "Draft", @user.id)
     @replies = Reply.where("user_id = ?", @user.id)
     @collects = @user.collect_posts.all

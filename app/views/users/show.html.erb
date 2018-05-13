@@ -62,8 +62,10 @@
       <li id="post" class="active"><a data-toggle="tab" href="#MyPost">My Post</a></li>
       <li id="comment"><a data-toggle="tab" href="#MyComment">My Comment</a></li>
       <li id="collect"><a data-toggle="tab" href="#MyCollect">My Collect</a></li>
-      <li id="draft"><a data-toggle="tab" href="#MyDraft">My Draft</a></li>
-      <li id="friend"><a data-toggle="tab" href="#MyFriend">My Frined</a></li>
+      <% if @user==current_user %>
+        <li id="draft"><a data-toggle="tab" href="#MyDraft">My Draft</a></li>
+        <li id="friend"><a data-toggle="tab" href="#MyFriend">My Frined</a></li>
+      <% end %>
     </ul>
 
 
@@ -98,8 +100,10 @@
             <div id="<%= reply.id %>">
               <h4><%= reply.post.title %></h4>
               <div class="content"><p><%= reply.content %></p></div>
-              <button id="<%= reply.user_id %>" type="button" class="edit-post btn btn-info" style="margin-bottom:10px;">Edit</button>
-              <button id="<%= reply.user_id%>" type="button" class="delete-todo btn btn-info" style="margin-bottom:10px;">Delete</button>
+              <% if current_user == @user %>
+                <button id="<%= reply.user_id %>" type="button" class="edit-post btn btn-info" style="margin-bottom:10px;">Edit</button>
+                <button id="<%= reply.user_id%>" type="button" class="delete-todo btn btn-info" style="margin-bottom:10px;">Delete</button>
+              <% end %>
             </div>
             <% end %>
       </div>
@@ -110,17 +114,19 @@
           <div id="<%= collect.id %>collect"> 
           <div id="<%= collect.id %>">
             <h4><%= collect.title %></h4>
-            <% if collect.is_collected?(current_user) %>
-              <button type="button" id="<%= collect.id %>collect-post" class="collect-post btn btn-info" style="margin-bottom:10px;margin-left: 20px;">Uncollect</button>
-            <% else %> 
-              <button type="button" id="<%= collect.id %>collect-post" class="collect-post btn btn-info" style="margin-bottom:10px;margin-left: 20px;">Collect</button>
+            <% if current_user == @user %>
+              <% if collect.is_collected?(current_user) %>
+                <button type="button" id="<%= collect.id %>collect-post" class="collect-post btn btn-info" style="margin-bottom:10px;margin-left: 20px;">Uncollect</button>
+              <% else %> 
+                <button type="button" id="<%= collect.id %>collect-post" class="collect-post btn btn-info" style="margin-bottom:10px;margin-left: 20px;">Collect</button>
+              <% end %>
             <% end %>
           </div>
           </div>
           <% end %>
         </div>
       </div>
-
+      <% if @user==current_user %>
       <div id="MyDraft" class="tab-pane fade">
         <table class="table table-striped ">
           <thead>
@@ -183,7 +189,7 @@
         </div>
 
       </div>
-
+    <% end %>
     </div>
 
   </div>

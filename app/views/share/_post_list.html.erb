@@ -1,0 +1,11 @@
+
+        <% @posts.each do |post| %>
+          <tr>
+            <td><%= post.replies_count %></td>
+            <th><%= post.title %></th>
+            <td><%= post.updated_at %></td>
+            <td><%= link_to '', post_path(post), class: "glyphicon glyphicon-eye-open" %> <%= post.viewed_count %></td>
+          </tr>
+        <% end %>
+
+

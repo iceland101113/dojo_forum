@@ -4,12 +4,13 @@
 <div class="container">
   <div class="row">
     <ul class="nav nav-pills nav-pills-center">
-      <li role="presentation" class="active"><%= link_to "全部分類", root_path %></li>
+      <li role="presentation" ><%= link_to "全部分類", root_path %></li>
         <% @categories.each do |category| %>
-          <li role="presentation"><%= link_to category.name, category_path(category) %></li>
+          <li role="presentation" class="<%= "active" if category == @category %>"><%= link_to category.name, category_path(category) %></li>
          <% end %>
     </ul>
     <br>
+
     <table id="myTable" class="table table-striped table-bordered tablesorter">
       <thead>
         <tr>
@@ -26,7 +27,6 @@
 
       </tbody>
     </table>
-
 
 
 </div>

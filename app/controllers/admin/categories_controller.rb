@@ -32,9 +32,16 @@ class Admin::CategoriesController < ApplicationController
   end
 
   def destroy
-    @category.destroy
-    flash[:alert] = "category was successfully deleted"
-    redirect_to admin_categories_path
+    size = @category.categorizations.size
+    if size > 0
+      flash[:alert] = "category is used. you can't delete it!"
+      redirect_to admin_categories_path
+    else
+      @category.destroy 
+      flash[:notice] = "category was successfully deleted"
+      redirect_to admin_categories_path
+    end
+
   end
 
 

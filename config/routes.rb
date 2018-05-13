@@ -31,6 +31,8 @@ Rails.application.routes.draw do
 
   end
 
+  resources :categories, only: :show
+
   namespace :admin do
     resources :categories   
     resources :users, only: [:index, :update]

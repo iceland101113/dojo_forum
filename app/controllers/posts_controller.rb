@@ -4,11 +4,31 @@ class PostsController < ApplicationController
   before_action :set_user, only: [:new, :create]
 
   def index
+    @categories = Category.all
     if current_user == nil
-      @posts = Post.where("authority = ? and situation = ?", "1", "Publish").page(params[:page]).per(20)
+      @posts = Post.where("authority = ? and situation = ?", "1", "Publish")
     else
       @user = current_user
-      @posts = Post.where(authority: ["1","3"], situation: "Publish")
+      posts1 = Post.where(authority: "1", situation: "Publish")
+      posts3 = Post.where(authority: "3", situation: "Publish", user_id: @user.id)
+      @posts= posts1+posts3
+
+      find_friends = @user.friendships
+      find_friends.each do |friend|
+          wfriend = Post.where(user_id:friend.friend_id, situation: "Publish", authority: "2" )
+        if friend.status == 1 
+          @posts = @posts + wfriend
+        end
+      end  
+
+      find_infriends = @user.inverse_friendships
+      find_infriends.each do |infriend|
+          winfriend = Post.where(user_id:infriend.user_id, situation: "Publish", authority: "2" )
+        if infriend.status == 1
+          @posts = @posts + winfriend
+        end
+      end
+
     end
   end
 
@@ -18,6 +38,7 @@ class PostsController < ApplicationController
 
   def create
     @post = @user.posts.build(post_params)
+    @post.viewed_count = 0
     @category = params[:posts][:category_ids]
     @post.category_ids = @category
 
@@ -30,7 +51,7 @@ class PostsController < ApplicationController
       else
         @post.situation = "Draft"
         @post.save
-        redirect_to draft_path
+        redirect_to user_path(@user)
       end
     else
       flash.now[:alert] = "post was failed to create"

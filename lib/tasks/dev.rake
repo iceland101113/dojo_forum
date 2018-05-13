@@ -33,11 +33,11 @@ namespace :dev do
           npost = user.posts.create!(
             content: FFaker::Lorem.sentence(50),
             title: FFaker::Lorem.sentence(6),
-            authority: np.to_s,
+            authority: "1",
             situation: s[sn-1],
             image: file
             )
-          npost.category_ids = c[np]
+          npost.category_ids = c[np-1]
           npost.save
         end
       end
@@ -48,12 +48,14 @@ namespace :dev do
   task fake_replies: :environment do
     Reply.destroy_all
       Post.all.each do |post|
-        n = rand(2..9)
-        n.times do |i|
-          post.replies.create!(
-            content: FFaker::Lorem.sentence,
-            user: User.all.sample
-            )
+        if post.situation == "Publish"
+          n = rand(2..9)
+          n.times do |i|
+            post.replies.create!(
+              content: FFaker::Lorem.sentence,
+              user: User.all.sample
+              )
+          end
         end
       end
 
@@ -62,7 +64,7 @@ namespace :dev do
 
   task count_in: :environment do
     Post.all.each do |post|
-      post.viewed_count = 0
+      post.viewed_count = 10
       post.save
         
     end
