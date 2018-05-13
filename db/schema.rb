@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180512170210) do
+ActiveRecord::Schema.define(version: 20180513120339) do
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
@@ -95,6 +95,8 @@ ActiveRecord::Schema.define(version: 20180512170210) do
     t.text "description"
     t.integer "role_id"
     t.integer "replies_count"
+    t.string "authentication_token"
+    t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
