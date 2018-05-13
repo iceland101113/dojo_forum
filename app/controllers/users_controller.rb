@@ -112,7 +112,9 @@ class UsersController < ApplicationController
       render :json => { :tag => "Waiting", :id => 1 }
     else
       @friends = Friendship.where(user_id: params[:user], friend_id: params[:id])
-      @friends.destroy_all     
+      @friendss = Friendship.where(user_id: params[:id], friend_id: params[:user])
+      @friends.destroy_all   
+      @friendss.destroy_all  
       render :json => { :tag => "Add friend", :id => 2 }
     end
 
