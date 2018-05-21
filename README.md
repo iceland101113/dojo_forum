@@ -79,8 +79,31 @@ https://dojo-forum20180513.herokuapp.com/api/v1/posts/:id?auth_token=
 https://dojo-forum20180513.herokuapp.com/api/v1/posts/:id?auth_token= 
 
 
-## 撰寫方式  
-ruby on rails, html, css, javaScript, jQuery, ajax     
+## 撰寫方式  
+使用語言：  
+ruby on rails, html, css, javaScript, jQuery, ajax 
+
+特別使用的gem；  
+[Carrierwave](https://github.com/carrierwaveuploader/carrierwave)  
+--完成使用者註冊及登入功能   
+
+[JQuery-tablesorter](https://github.com/themilkman/jquery-tablesorter-rails)  
+--完成文章總表排序功能, 使用者可以依據文章更新時間以及回覆或瀏覽數排序
+
+[font-awesome-rails](https://github.com/bokmann/font-awesome-rails)   
+--使用於總表排序表頭的上下按鈕樣式
+
+[FFaker](https://github.com/ffaker/ffaker/blob/master/REFERENCE.md)   
+--用來產生使用者名稱以及文章的標題以及內容等假資料  
+
+[jquery-rails](https://github.com/rails/jquery-rails)  
+[bootstrap-sass](https://github.com/twbs/bootstrap-sass)  
+--用來撰寫一些前端效果時需要用到,  例如使用者頁面查看所有po文或搜集文章時切換的頁籤的頁面, 該頁面的html及css可以參考w3shool的[Bootstrap Tabs and Pills](https://www.w3schools.com/bootstrap/bootstrap_tabs_pills.asp)  
+--撰寫加好友, 於profile頁面接受或忽略好友邀請, 收藏文章按鈕以及編輯更新留言這幾個功能時使用到了jQuery的  
+
+[jbuilder](https://github.com/rails/jbuilder)  
+--用來產生api回傳的json格式組合  
+
 
 ## 部署方式  
 已部署至heroku, 網址如下  
