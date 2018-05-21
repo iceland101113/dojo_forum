@@ -83,8 +83,8 @@ https://dojo-forum20180513.herokuapp.com/api/v1/posts/:id?auth_token=
 使用語言：  
 ruby on rails, html, css, javaScript, jQuery, ajax 
 
-特別使用的gem；  
-[Carrierwave](https://github.com/carrierwaveuploader/carrierwave)  
+特別使用的gem：     
+* [Carrierwave](https://github.com/carrierwaveuploader/carrierwave)  
 --完成使用者註冊及登入功能   
 
 [JQuery-tablesorter](https://github.com/themilkman/jquery-tablesorter-rails)  
