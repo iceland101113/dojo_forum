@@ -66,7 +66,7 @@ class PostsController < ApplicationController
     @post.save
     @user = User.find(@post.user_id)
     @reply = Reply.new
-    @replies = @post.replies.order(created_at: :desc)
+    @replies = @post.replies.includes(:user).order(created_at: :desc)
   end
 
   def edit

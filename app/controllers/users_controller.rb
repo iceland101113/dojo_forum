@@ -27,7 +27,7 @@ class UsersController < ApplicationController
 
 
     @drafts = Post.where("situation = ? and user_id = ?", "Draft", @user.id)
-    @replies = Reply.where("user_id = ?", @user.id)
+    @replies = Reply.includes(:post).where("user_id = ?", @user.id)
     @collects = @user.collect_posts.all
     u = Friendship.where("user_id = ? and friend_id = ?", @user.id, current_user.id)
     f = Friendship.where("user_id = ? and friend_id = ?", current_user.id, @user.id)
