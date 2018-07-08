@@ -1,4 +1,5 @@
 class Admin::CategoriesController < ApplicationController
+  layout "backend"
   before_action :authenticate_user!
   before_action :authenticate_admin
 

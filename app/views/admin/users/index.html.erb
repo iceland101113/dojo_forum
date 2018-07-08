@@ -29,7 +29,7 @@
               <div class="form-inline" >
               <%= form_for [:admin, user] do |f| %>
               <div class="form-group">
-              <%= f.collection_select :role_id, Role.all, :id, :rtype, {prompt: true}, {class: "form-control"} %></div>
+              <%= f.collection_select :role_id, @roles, :id, :rtype, {prompt: true}, {class: "form-control"} %></div>
               <%= f.submit class: "btn btn-primary", value: 'Update'%>
               <% end %></div>
             </td>

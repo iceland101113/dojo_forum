@@ -1,9 +1,11 @@
 class Admin::UsersController < ApplicationController
+  layout "backend"
   before_action :authenticate_user!
   before_action :authenticate_admin
 
   def index
     @users = User.all
+    @roles= Role.all
   end
 
   def update
