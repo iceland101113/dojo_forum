@@ -15,4 +15,16 @@ class Post < ApplicationRecord
     self.collect_users.include?(user)
   end
 
+  def self.publish_all
+    where("authority = ? and situation = ?", "1", "Publish")
+  end
+
+  def self.publish_myself(user_id)
+    where(authority: "3", situation: "Publish", user_id: user_id)
+  end
+
+  def self.publish_friends(friends_id)
+    where(user_id:friends_id, situation: "Publish", authority: "2" )
+  end
+
 end

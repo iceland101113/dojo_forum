@@ -6,28 +6,17 @@ class PostsController < ApplicationController
   def index
     @categories = Category.all
     if current_user == nil
-      @posts = Post.where("authority = ? and situation = ?", "1", "Publish")
+      @posts = Post.publish_all.order(id: :asc).page(params[:page]).per(20)
     else
       @user = current_user
-      posts1 = Post.where(authority: "1", situation: "Publish")
-      posts3 = Post.where(authority: "3", situation: "Publish", user_id: @user.id)
-      @posts= posts1+posts3
 
       find_friends = @user.friendships
-      find_friends.each do |friend|
-          wfriend = Post.where(user_id:friend.friend_id, situation: "Publish", authority: "2" )
-        if friend.status == 1 
-          @posts = @posts + wfriend
-        end
-      end  
-
       find_infriends = @user.inverse_friendships
-      find_infriends.each do |infriend|
-          winfriend = Post.where(user_id:infriend.user_id, situation: "Publish", authority: "2" )
-        if infriend.status == 1
-          @posts = @posts + winfriend
-        end
-      end
+      friends_id = find_friends.select(:friend_id).map(&:friend_id)
+      infriends_id = find_infriends.select(:user_id).map(&:user_id)
+      all_friends = friends_id + infriends_id
+
+      @posts = Post.publish_all.or(Post.publish_myself(@user.id)).or(Post.publish_friends(all_friends)).order(id: :asc).page(params[:page]).per(20)
 
     end
   end
