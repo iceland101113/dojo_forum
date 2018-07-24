@@ -1,0 +1,9 @@
+<div class="container">
+  <div class="row">
+  <%= @user.name %>你好：<br>
+  <br>
+  您的發文<%= @post.title %>有來自<%= @reply_user.email %>新回覆，回覆內容如下:<br>
+  <br>
+  <%= @reply.content %>
+  </div>
+</div>
