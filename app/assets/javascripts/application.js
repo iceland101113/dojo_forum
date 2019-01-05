@@ -16,3 +16,4 @@
 //= require jquery
 //= require bootstrap-sprockets
 //= require jquery-tablesorter
+//= require bootstrap-table
