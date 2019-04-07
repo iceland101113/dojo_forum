@@ -10,9 +10,9 @@ class RepliesController < ApplicationController
     @reply.save!
     if @reply.save
       UserConfirmEmailJob.set(wait: 5.seconds).perform_later(@post.user, @post, @reply)
+      # ContactMailer.say_hello_to(@post.user, @post, @reply).deliver_now 
       flash[:notice] = "reply was successfully created"
-      redirect_to post_path(@post)    
-      # ContactMailer.say_hello_to(@post.user, @post, @reply).deliver_now     
+      redirect_to post_path(@post)        
     else
       flash[:alert] = "reply was failed to create"
       render post_path(@post)
