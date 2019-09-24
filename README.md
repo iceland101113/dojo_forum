@@ -43,7 +43,7 @@
 
 ## Version  
 * ruby 
-* rails
+* rails 5.1.6
 
 ## Getting Started
 * set up
