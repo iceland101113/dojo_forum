@@ -21,7 +21,7 @@
   + manage website user and set their role
   + can delete all the post
   
-* For developer, can json data by using API below:
+* For developer, can get json data by using API below:
   + get all post 
     https://dojo-forum20180513.herokuapp.com/api/v1/posts 
     
