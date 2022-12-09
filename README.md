@@ -21,24 +21,24 @@
   + manage website user and set their role
   + can delete all the post
   
-* For developer, can get json data by using API below:
+* For developer, can get json data by using API path as below:
   + get all post 
-    https://dojo-forum20180513.herokuapp.com/api/v1/posts 
+    /api/v1/posts 
     
   + get auth_token
-    https://dojo-forum20180513.herokuapp.com/api/v1/login 
+    /api/v1/login 
 
   + get a post
-    https://dojo-forum20180513.herokuapp.com/api/v1/posts/:id?auth_token= 
+    /api/v1/posts/:id?auth_token= 
 
   + create a post 
-    https://dojo-forum20180513.herokuapp.com/api/v1/posts?auth_token= 
+    /api/v1/posts?auth_token= 
 
   + edit a post
-    https://dojo-forum20180513.herokuapp.com/api/v1/posts/:id?auth_token= 
+    /api/v1/posts/:id?auth_token= 
 
   + delete a post
-    https://dojo-forum20180513.herokuapp.com/api/v1/posts/:id?auth_token= 
+    /api/v1/posts/:id?auth_token= 
 
 
 ## Version  
