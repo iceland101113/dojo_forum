@@ -23,22 +23,22 @@
   
 * For developer, can get json data by using API path as below:
   + get all post 
-    /api/v1/posts 
+    `/api/v1/posts` 
     
   + get auth_token
-    /api/v1/login 
+    `/api/v1/login` 
 
   + get a post
-    /api/v1/posts/:id?auth_token= 
+    `/api/v1/posts/:id?auth_token={your_token}` 
 
   + create a post 
-    /api/v1/posts?auth_token= 
+    `/api/v1/posts?auth_token=` 
 
   + edit a post
-    /api/v1/posts/:id?auth_token= 
+    `/api/v1/posts/:id?auth_token={your_token}` 
 
   + delete a post
-    /api/v1/posts/:id?auth_token= 
+    `/api/v1/posts/:id?auth_token={your_token}` 
 
 
 ## Version  
